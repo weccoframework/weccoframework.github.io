@@ -2,9 +2,9 @@
 
 This page gives you an overview of how `wecco` can be used. This is your page
 to go especially of you are new to `wecco`. If you have specific questions
-concerning the API the [JavaScript API](../api-reference/) has an in-depth reference.
+concerning the API the [JavaScript API](../reference/api/) has an in-depth reference.
 For questions on how to write template strings see the 
-[HTML template reference](../html-tag-reference/).
+[HTML template reference](../reference/html-template-tag/).
 
 ## A `wecco` application
 
