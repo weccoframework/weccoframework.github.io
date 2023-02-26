@@ -1,0 +1,20 @@
+site_name: weccoframework/core
+
+theme:
+  name: material
+  features:
+  - content.code.copy
+
+
+markdown_extensions:
+- attr_list
+- pymdownx.emoji:
+    emoji_index: !!python/name:materialx.emoji.twemoji
+    emoji_generator: !!python/name:materialx.emoji.to_svg  
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.snippets
+- pymdownx.superfences
