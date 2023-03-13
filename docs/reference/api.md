@@ -24,11 +24,11 @@ class Model {
 
 type Message = // ...
 
-function update(model: Model, message: Message): Model {
+function update(ctx: wecco.AppContext<Message>, model: Model, message: Message): Model {
     // ...
 }
 
-function view (model: Model, context: wecco.AppContext<Message>) {
+function view (ctx: wecco.AppContext<Message>, model: Model) {
     // ...
 }
 
