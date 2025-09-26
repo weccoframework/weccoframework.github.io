@@ -17,11 +17,11 @@ your HTML.
 
 You can include the a bundled version of `wecco` into your web application.
 Simply go to the [releases](https://github.com/weccoframework/core/releases)
-and download the latest version of either the `umd` or `es5` bundle. To test a
+and download the latest version of either the `es6` or `es5` bundle. To test a
 version, you can directly load the bundle from the github downloads, i.e.
 
 ```html
-<script src="https://github.com/weccoframework/core/releases/download/v0.21.1/weccoframework-core.es5.js"></script>
+<script src="https://github.com/weccoframework/core/releases/download/v0.25.0/weccoframework-core.min.js"></script>
 ```
 
 Please note, that this is _not_ recommended for any kind of production systems

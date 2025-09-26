@@ -24,23 +24,27 @@ class Model {
 
 type Message = "inc"
 
-function update(ctx: wecco.AppContext<Message>, model: Model, message: Message): Model {
+function update({model}: wecco.UpdaterContext<Model, Message>): Model {
     return model.inc()
 }
 
-function view (ctx: wecco.AppContext<Message>, model: Model) {
+function view ({ emit, model }: wecco.ViewContext<Model, Message>) {
     return wecco.html`
-    <p>${model.explanation}</p>
+    <p class="text-sm">${model.explanation}</p>
     <p>
-        <button class="btn btn-primary" @click=${() => ctx.emit("inc")}>
+        <button 
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            @click=${() => emit("inc")}>
             You clicked me ${model.count} times
         </button>
     </p>`
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    wecco.app(() => new Model(0, "Click the button to increment the counter."), update, view, "#count-clicks-app")
+    wecco.createApp(() => new Model(0, "Click the button to increment the counter."), update, view)
+        .mount("#count-clicks-app")
 })
+
 ```
 
 `wecco` apps use the _Model-View-Update_ architecture pattern. This pattern
@@ -85,15 +89,20 @@ interface CountClicks {
     count?: number
 }
 
-const CountClicks = wecco.define("count-clicks", (data: CountClicks, context) => {
-    data.count = data.count ?: 0
+const CountClicks = wecco.define("count-clicks", ({ data, requestUpdate }: wecco.RenderContext<CountClicks>) => {
+    data.count = data.count ?? 0
 
     return wecco.html`<p>
-        <button class="btn btn-primary" @click=${() => { data.count++; context.requestUpdate(); }}>
+        <button 
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
+            @click=${() => { data.count++; requestUpdate() }}>
             You clicked me ${data.count} times
         </button>
     </p>`
-}, "count")
+}, {
+    observedAttributes: ["count"],
+})
+
 ```
 
 `wecco.define` is used to define a custom element. It returns a factory
@@ -107,23 +116,29 @@ must follow the custom webcomponent's conventions (i.e. it must contain a dash).
 The second parameter is the render callback. The render callback is called
 everytime the component should update.
 
-The first parameter passed to this callback is the component's data. Using
+The render callback receives a render context argument, which by convention is
+deconstructed to receive the properties, the render callback's implementation
+uses. This usually is the `data` property,
+which contains the data to be rendered. The type of data equals the
 Typescript this parameter's type is defined using a generic type parameter.
 You commonly use an interface to describe the type. 
 
-The second parameter is the notify update callback. It can be used to notify
+The second property usually used is the notify update callback. It can be used to notify
 the component that something has changed and the component should update its
 content. We use this callback to notify when the user has clicked the button
 and we updated the `data`-attribute `count`.
 
-The last line creates an instance of the component passing in an object that
-implements `CountClicks` - the data interface - which initializes the 
-component's data state. The result is an instance of `HTMLElement` which can be
-added to the DOM using plain DOM manipulation functions. The object also
-provides a convenience method `mount` which can be used to add the element to
-dom: Simply pass in a `HTMLElement` or a string which is passed to
-`document.querySelector` in order to obtain the element to add the new element
-as a child.
+In the example above, the element get's used from the HTML
 
-Check out the [examples](https://github.com/weccoframework/core/tree/master/examples)
+```html
+<div>
+    <h3 class="font-bold mb-2">Custom Element</h3>
+    <p class="text-sm">Click the button below to update its counter.</p>
+    <count-clicks count="1" />
+</div>
+```
+
+Note the `count="1"` attribute to provide an initial value for the counter.
+
+Check out the [examples](https://github.com/weccoframework/wecco/tree/main/packages/examples)
 to see these two in action as well as the classical todo app.
